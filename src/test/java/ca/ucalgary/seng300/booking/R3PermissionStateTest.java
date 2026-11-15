@@ -123,6 +123,20 @@ class R3PermissionStateTest {
         assertRejectedUnchanged(f, CancelStatus.DENIED, status, savedBefore);
     }
 
+    // boundary: non-owner, ACTIVE, 119 minutes before start -> DENIED
+    @Test
+    void nonOwner_activeBooking119MinutesBefore_isDenied(){
+        TestFixtures f = new TestFixtures();
+        f.seed("b1", ROOM, OWNER, 119, 179, BookingState.ACTIVE);
+        seedOther(f);
+        List<Booking> savedBefore = f.repository.all();
+
+        
+        CancelStatus status = f.service.cancel("b1", NON_OWNER);
+
+        assertRejectedUnchanged(f, CancelStatus.DENIED, status, savedBefore);
+    }
+
 
 }
 
